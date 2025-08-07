@@ -153,16 +153,18 @@ export function InsightsView() {
       await new Promise(resolve => setTimeout(resolve, 3000))
       // In a real implementation, this would call the LLM API
       const prompt = spark.llmPrompt`
-        Based on the healthcare insurance claims data analysis:
-        - Total claims: ${claimsData.length}
-        - Top rejection patterns: Technical documentation errors, Missing authorization codes
-        - Provider performance variations
         
-        Generate comprehensive training material covering:
-        1. Common rejection reasons and how to avoid them
-        2. Saudi CCHI compliance requirements
-        3. Best practices for claim submission
-        4. Provider-specific improvement areas
+  Based on the healthcare insurance claims data analysis:
+  - Total claims: ${claimsData.length}
+  - Top rejection patterns: Technical documentation errors, Missing authorization codes
+  - Provider performance variations
+  
+  Generate comprehensive training material covering:
+  1. Common rejection reasons and how to avoid them
+  2. Saudi CCHI compliance requirements
+  3. Best practices for claim submission
+  4. Provider-specific improvement areas
+
       `
       // For demo purposes, we'll simulate the response
       toast.success('Training material generated successfully')
