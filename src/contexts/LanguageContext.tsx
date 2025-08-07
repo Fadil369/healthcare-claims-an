@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 
 export type Language = 'en' | 'ar'
 
@@ -76,7 +76,7 @@ const translations = {
     'common.edit': 'Edit',
     'common.delete': 'Delete',
     'common.search': 'Search',
-    'common.filter': 'Filter',
+    'common.filter': 'Funnel',
     'common.export': 'Export',
     'common.days': 'days',
     'common.sar': 'SAR',

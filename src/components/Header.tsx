@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Activity, FileText, BarChart3, Lightbulb, Languages, Gear } from '@phosphor-icons/react'
+import { Activity, FileText, ChartBar, Lightbulb, Globe, Gear } from '@phosphor-icons/react'
 
 interface HeaderProps {
   activeView: string
@@ -14,7 +14,7 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
   const navItems = [
     { id: 'upload', label: t('header.upload'), icon: FileText },
     { id: 'dashboard', label: t('header.dashboard'), icon: Activity },
-    { id: 'analysis', label: t('header.analysis'), icon: BarChart3 },
+    { id: 'analysis', label: t('header.analysis'), icon: ChartBar },
     { id: 'insights', label: t('header.insights'), icon: Lightbulb },
     { id: 'rules', label: t('header.rules'), icon: Gear },
   ]
@@ -53,7 +53,7 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Languages className="w-4 h-4 text-muted-foreground" />
+              <Globe className="w-4 h-4 text-muted-foreground" />
               <Select value={language} onValueChange={(value: 'en' | 'ar') => setLanguage(value)}>
                 <SelectTrigger className="w-20">
                   <SelectValue />

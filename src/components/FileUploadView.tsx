@@ -1,13 +1,13 @@
 import { useState, useCallback, useRef } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Upload, FileText, CheckCircle, AlertCircle, Database, X, Eye, Trash } from '@phosphor-icons/react'
+import { Upload, FileText, CheckCircle, Warning, Database, X, Eye, Trash } from '@phosphor-icons/react'
 import { ClaimData } from '@/types'
 import { sampleClaimsData } from '@/lib/sampleData'
 import { fileProcessor, FileProcessingResult, ProcessingProgress } from '@/lib/fileProcessing'
@@ -354,7 +354,7 @@ export function FileUploadView() {
                     {result.success ? (
                       <CheckCircle className="w-4 h-4 text-secondary" />
                     ) : (
-                      <AlertCircle className="w-4 h-4 text-destructive" />
+                      <Warning className="w-4 h-4 text-destructive" />
                     )}
                     <div>
                       <p className="font-medium text-sm">{result.fileName}</p>
@@ -418,7 +418,7 @@ export function FileUploadView() {
         
         {/* Enhanced Security Notice */}
         <Alert>
-          <AlertCircle className="h-4 w-4" />
+          <Warning className="h-4 w-4" />
           <AlertDescription>
             <strong>Enhanced Security & Processing:</strong> Your data is processed locally using advanced AI technology 
             with multi-stage validation. All files remain secure and private. Supports unlimited file sizes and 
