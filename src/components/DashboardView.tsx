@@ -1,16 +1,23 @@
-import { useMemo } from 'react'
+import { useMemo, useRef, useCallback, useState } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useKV } from '@github/spark/hooks'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { Button } from '@/components/ui/button'
 import { ExportControls } from '@/components/ExportControls'
-import { TrendingUp, TrendingDown, Clock, AlertTriangle, CheckCircle, DollarSign } from '@phosphor-icons/react'
+import { TrendingUp, TrendingDown, Clock, AlertTriangle, CheckCircle, DollarSign, Upload, Plus } from '@phosphor-icons/react'
 import { ClaimData, AnalysisResult } from '@/types'
+import { fileProcessor, ProcessingProgress } from '@/lib/fileProcessing'
+import { toast } from 'sonner'
 
 export function DashboardView() {
   const { t } = useLanguage()
-  const [claimsData] = useKV<ClaimData[]>('claims-data', [])
+  const [claimsData, setClaimsData] = useKV<ClaimData[]>('claims-data', [])
+  const [, setLastProcessed] = useKV<string>('last-processed', '')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [processingProgress, setProcessingProgress] = useState<ProcessingProgress[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
   
   const metrics = useMemo(() => {
     if (!claimsData.length) return null
@@ -72,6 +79,68 @@ export function DashboardView() {
       analysisResult
     }
   }, [claimsData])
+
+  const handleFileSelect = useCallback(async (selectedFiles: FileList | null) => {
+    if (!selectedFiles || isProcessing) return
+    
+    const fileArray = Array.from(selectedFiles)
+    
+    // Validate files
+    const validation = fileProcessor.validateFiles(fileArray)
+    
+    if (validation.invalid.length > 0) {
+      validation.invalid.forEach(({ file, error }) => {
+        toast.error(`${file.name}: ${error}`)
+      })
+    }
+    
+    if (validation.valid.length === 0) return
+    
+    setIsProcessing(true)
+    setProcessingProgress([])
+    
+    try {
+      // Process files one by one
+      const allResults = []
+      
+      for (const file of validation.valid) {
+        const progressCallback = (progress: ProcessingProgress) => {
+          setProcessingProgress(prev => {
+            const existing = prev.find(p => p.fileName === progress.fileName)
+            if (existing) {
+              return prev.map(p => p.fileName === progress.fileName ? progress : p)
+            }
+            return [...prev, progress]
+          })
+        }
+        
+        const result = await fileProcessor.processFile(file, progressCallback)
+        allResults.push(result)
+      }
+      
+      // Combine all extracted data
+      const newClaimsData = allResults.flatMap(result => result.data)
+      
+      if (newClaimsData.length > 0) {
+        setClaimsData(prev => [...prev, ...newClaimsData])
+        setLastProcessed(new Date().toISOString())
+        toast.success(`Successfully processed ${validation.valid.length} file(s) and extracted ${newClaimsData.length} claims`)
+      } else {
+        toast.warning('No claims data found in the uploaded files')
+      }
+      
+    } catch (error) {
+      console.error('Processing error:', error)
+      toast.error('Failed to process files. Please try again.')
+    } finally {
+      setIsProcessing(false)
+      setProcessingProgress([])
+    }
+  }, [isProcessing, setClaimsData, setLastProcessed])
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
   
   if (!metrics) {
     return (
@@ -79,9 +148,21 @@ export function DashboardView() {
         <div className="text-center py-16">
           <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-2xl font-semibold mb-2">No Data Available</h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mb-6">
             Upload some files to see your claims dashboard
           </p>
+          <Button onClick={handleUploadClick} size="lg" className="gap-2">
+            <Upload className="w-5 h-5" />
+            Upload Files
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept=".pdf,.xlsx,.xls,.csv"
+            onChange={(e) => handleFileSelect(e.target.files)}
+            className="hidden"
+          />
         </div>
       </div>
     )
@@ -89,10 +170,58 @@ export function DashboardView() {
   
   return (
     <div className="container mx-auto px-6 py-8 space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold text-foreground">{t('dashboard.title')}</h1>
-        <p className="text-lg text-muted-foreground">{t('dashboard.overview')}</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-foreground">{t('dashboard.title')}</h1>
+          <p className="text-lg text-muted-foreground">{t('dashboard.overview')}</p>
+        </div>
+        
+        <div className="flex gap-2">
+          <Button 
+            onClick={handleUploadClick} 
+            variant="outline" 
+            size="sm" 
+            className="gap-2"
+            disabled={isProcessing}
+          >
+            <Plus className="w-4 h-4" />
+            Add More Files
+          </Button>
+        </div>
       </div>
+      
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept=".pdf,.xlsx,.xls,.csv"
+        onChange={(e) => handleFileSelect(e.target.files)}
+        className="hidden"
+      />
+      
+      {/* Processing Progress */}
+      {isProcessing && processingProgress.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Upload className="w-5 h-5 animate-pulse" />
+              Processing Files...
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {processingProgress.map((progress) => (
+              <div key={progress.fileName} className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="font-medium">{progress.fileName}</span>
+                  <span className="text-muted-foreground">{progress.stage}</span>
+                </div>
+                <Progress value={progress.progress} className="h-2" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
       
       {/* Export Controls */}
       <ExportControls 
