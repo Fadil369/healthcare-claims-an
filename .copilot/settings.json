@@ -4,22 +4,23 @@
   "codingStyle": {
     "naming": "camelCase",
     "indentation": 2,
-    "comments": "explain functions and complex logic",
-    "structure": "modular and component-based",
-    "typeScript": "strict typing with interfaces",
-    "reactPatterns": "functional components with hooks"
+    "comments": "explain functions and logic",
+    "structure": "modular",
+    "responsive": "mobile-first",
+    "accessibility": "WCAG-AA"
   },
-  "projectContext": {
-    "domain": "healthcare insurance claims analysis",
-    "languages": ["english", "arabic"],
-    "dataTypes": ["pdf", "excel", "claims", "rejections"],
-    "userTypes": ["healthcare providers", "insurance analysts"],
-    "features": ["file upload", "data analysis", "reporting", "insights"]
+  "patterns": {
+    "components": "Use shadcn/ui components as base",
+    "state": "useKV for persistence, useState for temporary",
+    "styling": "Tailwind utility classes with responsive prefixes",
+    "layout": "Mobile-first grid and flexbox layouts",
+    "navigation": "Mobile sidebar, desktop header navigation"
   },
-  "bestPractices": {
-    "security": "validate inputs, sanitize data, protect sensitive information",
-    "accessibility": "WCAG AA compliance, bilingual support",
-    "performance": "efficient data processing, responsive UI",
-    "maintainability": "clear code structure, proper documentation"
+  "healthcareSpecific": {
+    "compliance": "Saudi CCHI regulations",
+    "languages": ["en", "ar"],
+    "rtlSupport": true,
+    "dataPrivacy": "Local processing only",
+    "fileTypes": ["pdf", "xlsx", "csv"]
   }
 }

@@ -144,48 +144,47 @@ export function DashboardView() {
   
   if (!metrics) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="text-center py-16">
-          <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-2xl font-semibold mb-2">No Data Available</h2>
-          <p className="text-muted-foreground mb-6">
-            Upload some files to see your claims dashboard
-          </p>
-          <Button onClick={handleUploadClick} size="lg" className="gap-2">
-            <Upload className="w-5 h-5" />
-            Upload Files
-          </Button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept=".pdf,.xlsx,.xls,.csv"
-            onChange={(e) => handleFileSelect(e.target.files)}
-            className="hidden"
-          />
-        </div>
+      <div className="text-center py-12 sm:py-16 px-4">
+        <AlertTriangle className="w-12 h-12 sm:w-16 sm:h-16 text-muted-foreground mx-auto mb-4" />
+        <h2 className="text-xl sm:text-2xl font-semibold mb-2">No Data Available</h2>
+        <p className="text-muted-foreground mb-6 text-sm sm:text-base">
+          Upload some files to see your claims dashboard
+        </p>
+        <Button onClick={handleUploadClick} size="lg" className="gap-2 h-12">
+          <Upload className="w-5 h-5" />
+          Upload Files
+        </Button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept=".pdf,.xlsx,.xls,.csv"
+          onChange={(e) => handleFileSelect(e.target.files)}
+          className="hidden"
+        />
       </div>
     )
   }
   
   return (
-    <div className="container mx-auto px-6 py-8 space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">{t('dashboard.title')}</h1>
-          <p className="text-lg text-muted-foreground">{t('dashboard.overview')}</p>
+        <div className="space-y-1 sm:space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{t('dashboard.title')}</h1>
+          <p className="text-base sm:text-lg text-muted-foreground">{t('dashboard.overview')}</p>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 self-stretch sm:self-auto">
           <Button 
             onClick={handleUploadClick} 
             variant="outline" 
             size="sm" 
-            className="gap-2"
+            className="gap-2 flex-1 sm:flex-none"
             disabled={isProcessing}
           >
             <Plus className="w-4 h-4" />
-            Add More Files
+            <span className="hidden sm:inline">Add More Files</span>
+            <span className="sm:hidden">Add Files</span>
           </Button>
         </div>
       </div>
@@ -204,17 +203,17 @@ export function DashboardView() {
       {isProcessing && processingProgress.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Upload className="w-5 h-5 animate-pulse" />
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Upload className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
               Processing Files...
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4">
             {processingProgress.map((progress) => (
               <div key={progress.fileName} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="font-medium">{progress.fileName}</span>
-                  <span className="text-muted-foreground">{progress.stage}</span>
+                <div className="flex justify-between text-xs sm:text-sm">
+                  <span className="font-medium truncate flex-1 mr-2">{progress.fileName}</span>
+                  <span className="text-muted-foreground flex-shrink-0">{progress.stage}</span>
                 </div>
                 <Progress value={progress.progress} className="h-2" />
               </div>
@@ -230,7 +229,7 @@ export function DashboardView() {
       />
       
       {/* Key Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -239,7 +238,7 @@ export function DashboardView() {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{metrics.totalClaims.toLocaleString()}</div>
+            <div className="text-xl sm:text-2xl font-bold">{metrics.totalClaims.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               {metrics.recentClaims} in the last 7 days
             </p>
@@ -254,7 +253,7 @@ export function DashboardView() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-xl sm:text-2xl font-bold">
               {metrics.totalAmount.toLocaleString()} {t('common.sar')}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -271,7 +270,7 @@ export function DashboardView() {
             <AlertTriangle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">
+            <div className="text-xl sm:text-2xl font-bold text-destructive">
               {metrics.rejectedClaims.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -288,7 +287,7 @@ export function DashboardView() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-xl sm:text-2xl font-bold">
               {metrics.avgProcessingTime.toFixed(1)} {t('common.days')}
             </div>
             <div className="flex items-center text-xs text-muted-foreground">
@@ -306,7 +305,7 @@ export function DashboardView() {
             <Clock className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">
+            <div className="text-xl sm:text-2xl font-bold text-yellow-600">
               {metrics.pendingClaims.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -323,7 +322,7 @@ export function DashboardView() {
             <TrendingUp className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-xl sm:text-2xl font-bold">
               {metrics.rejectionRate.toFixed(1)}%
             </div>
             <div className="w-full bg-secondary rounded-full h-2 mt-2">
@@ -339,26 +338,26 @@ export function DashboardView() {
       {/* Top Rejection Reasons */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-destructive" />
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-destructive" />
             {t('dashboard.topRejectionReasons')}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-xs sm:text-sm">
             Most common reasons for claim rejections
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3 sm:space-y-4">
           {metrics.topRejectionReasons.map(([reason, count], index) => {
             const percentage = (count / metrics.rejectedClaims) * 100
             return (
               <div key={reason} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline">#{index + 1}</Badge>
-                    <span className="font-medium text-sm">{reason}</span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <Badge variant="outline" className="text-xs flex-shrink-0">#{index + 1}</Badge>
+                    <span className="font-medium text-xs sm:text-sm truncate">{reason}</span>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {count} claims ({percentage.toFixed(1)}%)
+                  <div className="text-xs sm:text-sm text-muted-foreground flex-shrink-0">
+                    {count} ({percentage.toFixed(1)}%)
                   </div>
                 </div>
                 <Progress value={percentage} className="h-2" />
@@ -371,27 +370,27 @@ export function DashboardView() {
       {/* Saudi Market Compliance */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 text-secondary" />
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-secondary" />
             {t('saudi.compliance')}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-xs sm:text-sm">
             Compliance with Saudi healthcare insurance regulations
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-secondary/10 rounded-lg">
-              <div className="text-2xl font-bold text-secondary">98.5%</div>
-              <p className="text-sm text-muted-foreground">CCHI Compliance</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div className="text-center p-3 sm:p-4 bg-secondary/10 rounded-lg">
+              <div className="text-xl sm:text-2xl font-bold text-secondary">98.5%</div>
+              <p className="text-xs sm:text-sm text-muted-foreground">CCHI Compliance</p>
             </div>
-            <div className="text-center p-4 bg-accent/10 rounded-lg">
-              <div className="text-2xl font-bold text-accent">100%</div>
-              <p className="text-sm text-muted-foreground">Data Security</p>
+            <div className="text-center p-3 sm:p-4 bg-accent/10 rounded-lg">
+              <div className="text-xl sm:text-2xl font-bold text-accent">100%</div>
+              <p className="text-xs sm:text-sm text-muted-foreground">Data Security</p>
             </div>
-            <div className="text-center p-4 bg-primary/10 rounded-lg">
-              <div className="text-2xl font-bold text-primary">95.2%</div>
-              <p className="text-sm text-muted-foreground">Processing Standards</p>
+            <div className="text-center p-3 sm:p-4 bg-primary/10 rounded-lg">
+              <div className="text-xl sm:text-2xl font-bold text-primary">95.2%</div>
+              <p className="text-xs sm:text-sm text-muted-foreground">Processing Standards</p>
             </div>
           </div>
         </CardContent>

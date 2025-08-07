@@ -20,6 +20,10 @@ const translations = {
     'header.insights': 'Insights',
     'header.rules': 'Rules',
     
+    // Navigation
+    'navigation': 'Navigation',
+    'settings': 'Settings',
+    
     // Upload
     'upload.title': 'Upload Insurance Files',
     'upload.subtitle': 'Upload PDF and Excel files to analyze claims, rejections, and billing data',
@@ -90,6 +94,10 @@ const translations = {
     'header.analysis': 'التحليل',
     'header.insights': 'الرؤى',
     'header.rules': 'القواعد',
+    
+    // Navigation
+    'navigation': 'التنقل',
+    'settings': 'الإعدادات',
     
     // Upload
     'upload.title': 'رفع ملفات التأمين',

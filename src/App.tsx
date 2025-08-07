@@ -31,10 +31,12 @@ function App() {
   
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background flex flex-col">
         <Header activeView={activeView} onViewChange={setActiveView} />
-        <main className="pb-8">
-          {renderView()}
+        <main className="flex-1 container mx-auto px-4 py-4 lg:px-6 lg:py-8 max-w-7xl">
+          <div className="h-full">
+            {renderView()}
+          </div>
         </main>
         <Toaster />
       </div>

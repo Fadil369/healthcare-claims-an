@@ -2,6 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Activity, FileText, BarChart3, Lightbulb, Languages, Gear } from '@phosphor-icons/react'
+import { MobileNavbar } from '@/components/MobileNavbar'
 
 interface HeaderProps {
   activeView: string
@@ -20,50 +21,54 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
   ]
   
   return (
-    <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-      <div className="container mx-auto px-6 py-4">
+    <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+      <div className="container mx-auto px-4 py-3 lg:px-6 lg:py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          {/* Mobile Navigation and Logo */}
+          <div className="flex items-center gap-3">
+            <MobileNavbar activeView={activeView} onViewChange={onViewChange} />
+            
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Activity className="w-5 h-5 text-primary-foreground" />
               </div>
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-lg lg:text-xl font-bold text-foreground truncate">
                 {t('app.title')}
               </h1>
             </div>
-            
-            <nav className="hidden md:flex items-center gap-1">
-              {navItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <Button
-                    key={item.id}
-                    variant={activeView === item.id ? 'default' : 'ghost'}
-                    onClick={() => onViewChange(item.id)}
-                    className="gap-2"
-                  >
-                    <Icon className="w-4 h-4" />
-                    {item.label}
-                  </Button>
-                )
-              })}
-            </nav>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Languages className="w-4 h-4 text-muted-foreground" />
-              <Select value={language} onValueChange={(value: 'en' | 'ar') => setLanguage(value)}>
-                <SelectTrigger className="w-20">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">EN</SelectItem>
-                  <SelectItem value="ar">AR</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <Button
+                  key={item.id}
+                  variant={activeView === item.id ? 'default' : 'ghost'}
+                  onClick={() => onViewChange(item.id)}
+                  className="gap-2 h-9"
+                  size="sm"
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="hidden xl:inline">{item.label}</span>
+                </Button>
+              )
+            })}
+          </nav>
+          
+          {/* Language Selector */}
+          <div className="flex items-center gap-2">
+            <Languages className="w-4 h-4 text-muted-foreground hidden sm:block" />
+            <Select value={language} onValueChange={(value: 'en' | 'ar') => setLanguage(value)}>
+              <SelectTrigger className="w-16 h-8 text-xs sm:w-20 sm:h-9 sm:text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">EN</SelectItem>
+                <SelectItem value="ar">AR</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
