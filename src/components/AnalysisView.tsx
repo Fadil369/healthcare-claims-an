@@ -7,9 +7,10 @@ import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
+import { ExportControls } from '@/components/ExportControls'
 import { TrendingUp, TrendingDown, Minus, AlertTriangle, Activity, Calendar, Gear, ChartBar } from '@phosphor-icons/react'
 import { rejectionRulesEngine } from '@/lib/rejectionRulesEngine'
-import { ClaimData, RejectionPattern, RejectionAnalysis, RejectionRule, InsuranceProvider } from '@/types'
+import { ClaimData, RejectionPattern, RejectionAnalysis, RejectionRule, InsuranceProvider, AnalysisResult } from '@/types'
 
 export function AnalysisView() {
   const { language, t } = useLanguage()
@@ -158,7 +159,20 @@ export function AnalysisView() {
       technicalRejections: technicalRejections.length,
       patterns,
       providerAnalysis,
-      trends
+      trends,
+      // Create full analysis result for export
+      analysisResult: {
+        totalClaims: filteredData.length,
+        totalAmount: filteredData.reduce((sum, c) => sum + c.amount, 0),
+        rejectedClaims: rejectedClaims.length,
+        rejectionRate: (rejectedClaims.length / filteredData.length) * 100,
+        avgProcessingTime: filteredData.reduce((sum, c) => sum + c.processingTime, 0) / filteredData.length,
+        pendingClaims: filteredData.filter(c => c.status === 'pending').length,
+        patterns,
+        insights: [],
+        rejectionAnalysis,
+        trends
+      }
     }
   }, [claimsData, timeRange, selectedProvider])
   
@@ -279,12 +293,22 @@ export function AnalysisView() {
       </div>
       
       <Tabs defaultValue="patterns" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="patterns">{language === 'ar' ? 'الأنماط' : 'Patterns'}</TabsTrigger>
-          <TabsTrigger value="rules">{language === 'ar' ? 'تحليل القواعد' : 'Rules Analysis'}</TabsTrigger>
-          <TabsTrigger value="providers">{language === 'ar' ? 'مقدمو الخدمة' : 'Providers'}</TabsTrigger>
-          <TabsTrigger value="trends">{language === 'ar' ? 'الاتجاهات' : 'Trends'}</TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-between">
+          <TabsList className="grid w-full max-w-md grid-cols-4">
+            <TabsTrigger value="patterns">{language === 'ar' ? 'الأنماط' : 'Patterns'}</TabsTrigger>
+            <TabsTrigger value="rules">{language === 'ar' ? 'تحليل القواعد' : 'Rules Analysis'}</TabsTrigger>
+            <TabsTrigger value="providers">{language === 'ar' ? 'مقدمو الخدمة' : 'Providers'}</TabsTrigger>
+            <TabsTrigger value="trends">{language === 'ar' ? 'الاتجاهات' : 'Trends'}</TabsTrigger>
+          </TabsList>
+          
+          {/* Export Controls for Analysis */}
+          <ExportControls 
+            data={claimsData}
+            analysisResult={analysisData.analysisResult}
+            rejectionAnalysis={rejectionAnalysis}
+            className="w-auto"
+          />
+        </div>
         
         <TabsContent value="patterns" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

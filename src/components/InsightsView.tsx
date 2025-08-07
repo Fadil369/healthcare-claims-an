@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
+import { ExportControls } from '@/components/ExportControls'
 import { 
   Lightbulb, 
   Download, 
@@ -230,6 +231,12 @@ export function InsightsView() {
           AI-powered insights and actionable recommendations to improve your claims performance
         </p>
       </div>
+      
+      {/* Export Controls for Insights */}
+      <ExportControls 
+        data={claimsData}
+        insights={insights}
+      />
       
       <Tabs defaultValue="insights" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">

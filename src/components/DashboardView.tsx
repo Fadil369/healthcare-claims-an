@@ -4,8 +4,9 @@ import { useKV } from '@github/spark/hooks'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { ExportControls } from '@/components/ExportControls'
 import { TrendingUp, TrendingDown, Clock, AlertTriangle, CheckCircle, DollarSign } from '@phosphor-icons/react'
-import { ClaimData } from '@/types'
+import { ClaimData, AnalysisResult } from '@/types'
 
 export function DashboardView() {
   const { t } = useLanguage()
@@ -43,6 +44,20 @@ export function DashboardView() {
     const recentClaims = claimsData.filter(
       claim => new Date(claim.submissionDate) >= sevenDaysAgo
     )
+
+    // Create analysis result for export
+    const analysisResult: AnalysisResult = {
+      totalClaims,
+      totalAmount,
+      rejectedClaims,
+      rejectionRate,
+      avgProcessingTime,
+      pendingClaims,
+      patterns: [],
+      insights: [],
+      rejectionAnalysis: [],
+      trends: []
+    }
     
     return {
       totalClaims,
@@ -53,7 +68,8 @@ export function DashboardView() {
       avgProcessingTime,
       rejectionRate,
       topRejectionReasons,
-      recentClaims: recentClaims.length
+      recentClaims: recentClaims.length,
+      analysisResult
     }
   }, [claimsData])
   
@@ -77,6 +93,12 @@ export function DashboardView() {
         <h1 className="text-3xl font-bold text-foreground">{t('dashboard.title')}</h1>
         <p className="text-lg text-muted-foreground">{t('dashboard.overview')}</p>
       </div>
+      
+      {/* Export Controls */}
+      <ExportControls 
+        data={claimsData}
+        analysisResult={metrics.analysisResult}
+      />
       
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
