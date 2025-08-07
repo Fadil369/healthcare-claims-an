@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Edit, Trash2, Settings, Building2, AlertTriangle, CheckCircle, Clock, Download, Upload, Copy, Search, Filter } from '@phosphor-icons/react'
+import { Plus, Edit, Trash, Gear, Building, Warning, CheckCircle, Clock, Download, Upload, Copy, Search, Funnel } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import type { RejectionRule, InsuranceProvider } from '@/types'
 
@@ -234,8 +234,8 @@ export function RejectionCategoriesView() {
     isActive: true
   })
 
-  // Filter categories based on search and type
-  const getFilteredCategories = (type: 'medical' | 'technical') => {
+  // Funnel categories based on search and type
+  const getFunneledCategories = (type: 'medical' | 'technical') => {
     const categories = saudiRejectionCategories[type]
     return Object.entries(categories).filter(([key, category]) => {
       if (searchTerm) {
@@ -363,7 +363,7 @@ export function RejectionCategoriesView() {
           <Dialog open={isCreateProviderOpen} onOpenChange={setIsCreateProviderOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="flex-1 sm:flex-none">
-                <Building2 className="h-4 w-4 mr-2" />
+                <Building className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">{language === 'ar' ? 'إضافة شركة تأمين' : 'Add Provider'}</span>
                 <span className="sm:hidden">{language === 'ar' ? 'شركة' : 'Provider'}</span>
               </Button>
@@ -568,7 +568,7 @@ export function RejectionCategoriesView() {
         </div>
       </div>
 
-      {/* Search and Filter Section */}
+      {/* Search and Funnel Section */}
       <div className="space-y-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
@@ -585,7 +585,7 @@ export function RejectionCategoriesView() {
           <div className="flex gap-2">
             <Select value={selectedCategory} onValueChange={(value: any) => setSelectedCategory(value)}>
               <SelectTrigger className="w-full sm:w-[140px]">
-                <Filter className="h-4 w-4 mr-2" />
+                <Funnel className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -626,12 +626,12 @@ export function RejectionCategoriesView() {
                   {language === 'ar' ? 'الفئات الطبية' : 'Medical Categories'}
                 </h2>
                 <Badge variant="outline">
-                  {getFilteredCategories('medical').length}
+                  {getFunneledCategories('medical').length}
                 </Badge>
               </div>
               
               <div className="grid gap-4">
-                {getFilteredCategories('medical').map(([key, category]) => (
+                {getFunneledCategories('medical').map(([key, category]) => (
                   <Card key={key} className="transition-all hover:shadow-md">
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
@@ -693,12 +693,12 @@ export function RejectionCategoriesView() {
                   {language === 'ar' ? 'الفئات التقنية' : 'Technical Categories'}
                 </h2>
                 <Badge variant="outline">
-                  {getFilteredCategories('technical').length}
+                  {getFunneledCategories('technical').length}
                 </Badge>
               </div>
               
               <div className="grid gap-4">
-                {getFilteredCategories('technical').map(([key, category]) => (
+                {getFunneledCategories('technical').map(([key, category]) => (
                   <Card key={key} className="transition-all hover:shadow-md">
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
@@ -803,7 +803,7 @@ export function RejectionCategoriesView() {
                     className="w-full"
                     onClick={() => setSelectedProvider(provider.id)}
                   >
-                    <Settings className="h-4 w-4 mr-2" />
+                    <Gear className="h-4 w-4 mr-2" />
                     {language === 'ar' ? 'إدارة الفئات' : 'Manage Categories'}
                   </Button>
                 </CardContent>

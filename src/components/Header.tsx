@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Activity, FileText, BarChart3, Lightbulb, Languages, Gear, Tag } from '@phosphor-icons/react'
+import { Activity, FileText, ChartBar, Lightbulb, Translate, Gear, Tag } from '@phosphor-icons/react'
 import { MobileNavbar } from '@/components/MobileNavbar'
 
 interface HeaderProps {
@@ -15,7 +15,7 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
   const navItems = [
     { id: 'upload', label: t('header.upload'), icon: FileText },
     { id: 'dashboard', label: t('header.dashboard'), icon: Activity },
-    { id: 'analysis', label: t('header.analysis'), icon: BarChart3 },
+    { id: 'analysis', label: t('header.analysis'), icon: ChartBar },
     { id: 'insights', label: t('header.insights'), icon: Lightbulb },
     { id: 'rules', label: t('header.rules'), icon: Gear },
     { id: 'categories', label: t('header.categories'), icon: Tag },
@@ -62,7 +62,7 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
           
           {/* Language Selector */}
           <div className="flex items-center gap-2">
-            <Languages className="w-4 h-4 text-muted-foreground hidden sm:block" />
+            <Translate className="w-4 h-4 text-muted-foreground hidden sm:block" />
             <Select value={language} onValueChange={(value: 'en' | 'ar') => setLanguage(value)}>
               <SelectTrigger className="w-16 h-8 text-xs sm:w-20 sm:h-9 sm:text-sm">
                 <SelectValue />

@@ -1,12 +1,12 @@
 import { useMemo, useRef, useCallback, useState } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { ExportControls } from '@/components/ExportControls'
-import { TrendingUp, TrendingDown, Clock, AlertTriangle, CheckCircle, DollarSign, Upload, Plus } from '@phosphor-icons/react'
+import { TrendUp, TrendDown, Clock, Warning, CheckCircle, CurrencyDollar, Upload, Plus } from '@phosphor-icons/react'
 import { ClaimData, AnalysisResult } from '@/types'
 import { fileProcessor, ProcessingProgress } from '@/lib/fileProcessing'
 import { toast } from 'sonner'
@@ -145,7 +145,7 @@ export function DashboardView() {
   if (!metrics) {
     return (
       <div className="text-center py-12 sm:py-16 px-4">
-        <AlertTriangle className="w-12 h-12 sm:w-16 sm:h-16 text-muted-foreground mx-auto mb-4" />
+        <Warning className="w-12 h-12 sm:w-16 sm:h-16 text-muted-foreground mx-auto mb-4" />
         <h2 className="text-xl sm:text-2xl font-semibold mb-2">No Data Available</h2>
         <p className="text-muted-foreground mb-6 text-sm sm:text-base">
           Upload some files to see your claims dashboard
@@ -250,7 +250,7 @@ export function DashboardView() {
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {t('dashboard.totalAmount')}
             </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CurrencyDollar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-xl sm:text-2xl font-bold">
@@ -267,7 +267,7 @@ export function DashboardView() {
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {t('dashboard.rejectedClaims')}
             </CardTitle>
-            <AlertTriangle className="h-4 w-4 text-destructive" />
+            <Warning className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
             <div className="text-xl sm:text-2xl font-bold text-destructive">
@@ -291,7 +291,7 @@ export function DashboardView() {
               {metrics.avgProcessingTime.toFixed(1)} {t('common.days')}
             </div>
             <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingDown className="h-3 w-3 mr-1 text-secondary" />
+              <TrendDown className="h-3 w-3 mr-1 text-secondary" />
               Improving
             </div>
           </CardContent>
@@ -319,7 +319,7 @@ export function DashboardView() {
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {t('dashboard.rejectionRate')}
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-destructive" />
+            <TrendUp className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
             <div className="text-xl sm:text-2xl font-bold">
@@ -339,7 +339,7 @@ export function DashboardView() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-            <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-destructive" />
+            <Warning className="w-4 h-4 sm:w-5 sm:h-5 text-destructive" />
             {t('dashboard.topRejectionReasons')}
           </CardTitle>
           <CardDescription className="text-xs sm:text-sm">

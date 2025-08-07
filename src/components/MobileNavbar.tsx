@@ -3,7 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Activity, FileText, BarChart3, Lightbulb, Languages, Gear, Tag, List, X } from '@phosphor-icons/react'
+import { Activity, FileText, ChartBar, Lightbulb, Translate, Gear, Tag, List, X } from '@phosphor-icons/react'
 
 interface MobileNavbarProps {
   activeView: string
@@ -17,7 +17,7 @@ export function MobileNavbar({ activeView, onViewChange }: MobileNavbarProps) {
   const navItems = [
     { id: 'upload', label: t('header.upload'), icon: FileText },
     { id: 'dashboard', label: t('header.dashboard'), icon: Activity },
-    { id: 'analysis', label: t('header.analysis'), icon: BarChart3 },
+    { id: 'analysis', label: t('header.analysis'), icon: ChartBar },
     { id: 'insights', label: t('header.insights'), icon: Lightbulb },
     { id: 'rules', label: t('header.rules'), icon: Gear },
     { id: 'categories', label: t('header.categories'), icon: Tag },
@@ -88,7 +88,7 @@ export function MobileNavbar({ activeView, onViewChange }: MobileNavbarProps) {
               {t('settings')}
             </h3>
             <div className="flex items-center gap-3">
-              <Languages className="w-5 h-5 text-muted-foreground" />
+              <Translate className="w-5 h-5 text-muted-foreground" />
               <Select value={language} onValueChange={(value: 'en' | 'ar') => setLanguage(value)}>
                 <SelectTrigger className="flex-1">
                   <SelectValue />

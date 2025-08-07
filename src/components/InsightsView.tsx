@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -12,10 +12,10 @@ import {
   Lightbulb, 
   Download, 
   BookOpen, 
-  TrendingUp, 
+  TrendUp, 
   Target, 
   CheckCircle,
-  AlertTriangle,
+  Warning,
   Brain
 } from '@phosphor-icons/react'
 import { ClaimData, InsightData } from '@/types'
@@ -211,7 +211,7 @@ export function InsightsView() {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'actionable': return <Target className="w-4 h-4" />
-      case 'warning': return <AlertTriangle className="w-4 h-4" />
+      case 'warning': return <Warning className="w-4 h-4" />
       default: return <CheckCircle className="w-4 h-4" />
     }
   }
@@ -387,13 +387,13 @@ export function InsightsView() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5" />
+                  <Warning className="w-5 h-5" />
                   AI Risk Assessment
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <Warning className="h-4 w-4" />
                   <AlertDescription>
                     85% confidence in rejection pattern predictions based on current data trends
                   </AlertDescription>
