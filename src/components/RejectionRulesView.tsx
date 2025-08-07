@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Edit, Trash2, Settings, Building2, AlertTriangle, CheckCircle, Clock, Download, Upload } from '@phosphor-icons/react'
+import { Plus, Pencil, Trash2, Gear, Building, Warning, CheckCircle, Clock, Download, Upload } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { defaultSaudiRejectionRules } from '@/lib/defaultRejectionRules'
 import type { RejectionRule, InsuranceProvider } from '@/types'
@@ -281,8 +281,8 @@ export function RejectionRulesView() {
 
   const getSeverityIcon = (severity: RejectionRule['severity']) => {
     switch (severity) {
-      case 'critical': return <AlertTriangle className="h-4 w-4" />
-      case 'high': return <AlertTriangle className="h-4 w-4" />
+      case 'critical': return <Warning className="h-4 w-4" />
+      case 'high': return <Warning className="h-4 w-4" />
       case 'medium': return <Clock className="h-4 w-4" />
       case 'low': return <CheckCircle className="h-4 w-4" />
       default: return <CheckCircle className="h-4 w-4" />
@@ -315,7 +315,7 @@ export function RejectionRulesView() {
           <Dialog open={isCreateProviderOpen} onOpenChange={setIsCreateProviderOpen}>
             <DialogTrigger asChild>
               <Button variant="outline">
-                <Building2 className="h-4 w-4 mr-2" />
+                <Building className="h-4 w-4 mr-2" />
                 {language === 'ar' ? 'إضافة شركة تأمين' : 'Add Provider'}
               </Button>
             </DialogTrigger>
@@ -756,7 +756,7 @@ export function RejectionRulesView() {
                     className="w-full mt-4"
                     onClick={() => setSelectedProvider(provider.id)}
                   >
-                    <Settings className="h-4 w-4 mr-2" />
+                    <Gear className="h-4 w-4 mr-2" />
                     {language === 'ar' ? 'إدارة القواعد' : 'Manage Rules'}
                   </Button>
                 </CardContent>
@@ -770,7 +770,7 @@ export function RejectionRulesView() {
             <Card>
               <CardContent className="flex items-center justify-center py-12">
                 <div className="text-center space-y-2">
-                  <Building2 className="h-12 w-12 mx-auto text-muted-foreground" />
+                  <Building className="h-12 w-12 mx-auto text-muted-foreground" />
                   <h3 className="font-semibold">
                     {language === 'ar' ? 'اختر شركة تأمين' : 'Select Insurance Provider'}
                   </h3>
@@ -835,7 +835,7 @@ export function RejectionRulesView() {
                             onCheckedChange={() => handleToggleRule(rule.id, false)}
                           />
                           <Button variant="outline" size="sm">
-                            <Edit className="h-4 w-4" />
+                            <Pencil className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
@@ -890,7 +890,7 @@ export function RejectionRulesView() {
                         onCheckedChange={() => handleToggleRule(rule.id, true)}
                       />
                       <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
+                        <Pencil className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>

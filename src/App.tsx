@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { Header } from '@/components/Header'
 import { FileUploadView } from '@/components/FileUploadView'
 import { DashboardView } from '@/components/DashboardView'
-import { AnalysisView } from '@/components/AnalysisView'
+import { EnhancedAnalysisView } from '@/components/EnhancedAnalysisView'
 import { InsightsView } from '@/components/InsightsView'
 import { RejectionRulesView } from '@/components/RejectionRulesView'
 import { Toaster } from '@/components/ui/sonner'
@@ -19,7 +19,7 @@ function App() {
       case 'dashboard':
         return <DashboardView />
       case 'analysis':
-        return <AnalysisView />
+        return <EnhancedAnalysisView />
       case 'insights':
         return <InsightsView />
       case 'rules':
