@@ -1,0 +1,39 @@
+{
+  "preferredLanguages": ["typescript", "javascript", "css", "html"],
+  "frameworks": ["react", "tailwindcss", "vite"],
+  "domain": "healthcare-analytics",
+  "codingStyle": {
+    "naming": {
+      "variables": "camelCase",
+      "functions": "camelCase", 
+      "components": "PascalCase",
+      "types": "PascalCase",
+      "constants": "UPPER_SNAKE_CASE",
+      "files": "kebab-case for utilities, PascalCase for components"
+    },
+    "indentation": 2,
+    "quotes": "single",
+    "semicolons": true,
+    "comments": "explain functions, complex logic, and business rules",
+    "structure": "modular and domain-driven"
+  },
+  "patterns": {
+    "components": "functional components with hooks",
+    "stateManagement": "React Context + useKV for persistence",
+    "errorHandling": "comprehensive with user-friendly messages",
+    "dataValidation": "strict validation for healthcare data",
+    "security": "HIPAA compliance considerations"
+  },
+  "conventions": {
+    "bilingual": "support Arabic and English throughout",
+    "accessibility": "WCAG AA compliance",
+    "responsive": "mobile-first design",
+    "performance": "optimize for large file processing"
+  },
+  "businessContext": {
+    "domain": "Saudi healthcare insurance claims analysis",
+    "dataTypes": ["PDF documents", "Excel spreadsheets", "claims data"],
+    "regulations": ["Saudi healthcare standards", "HIPAA considerations"],
+    "userTypes": ["healthcare providers", "insurance analysts", "administrators"]
+  }
+}
