@@ -1,4 +1,7 @@
 import { ClaimData, RejectionAnalysis, InsightData, AnalysisResult } from '@/types'
+import * as XLSX from 'xlsx'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 export interface ExportOptions {
   format: 'xlsx' | 'csv' | 'pdf' | 'json'
@@ -117,15 +120,47 @@ export class DataExporter {
   }
 
   private async exportToExcel(data: ClaimData[], options: ExportOptions): Promise<ExportResult> {
-    // Simulate Excel export using CSV format (would use a library like xlsx in real implementation)
-    const csvContent = this.generateCSVContent(data, options)
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    
-    return {
-      success: true,
-      blob,
-      filename: `claims_export_${new Date().toISOString().split('T')[0]}.csv`,
-      recordCount: data.length
+    try {
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new()
+      
+      // Convert data to worksheet
+      const worksheetData = this.prepareDataForExcel(data, options)
+      const worksheet = XLSX.utils.aoa_to_sheet(worksheetData)
+      
+      // Add styling and formatting
+      this.formatExcelWorksheet(worksheet, worksheetData[0].length)
+      
+      // Add the worksheet to workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Claims Data')
+      
+      // Add summary sheet if requested
+      if (options.includeAnalysis) {
+        const summaryData = this.createSummarySheet(data, options)
+        const summaryWorksheet = XLSX.utils.aoa_to_sheet(summaryData)
+        XLSX.utils.book_append_sheet(workbook, summaryWorksheet, 'Summary')
+      }
+      
+      // Generate Excel file buffer
+      const excelBuffer = XLSX.write(workbook, { 
+        type: 'array', 
+        bookType: 'xlsx',
+        compression: true 
+      })
+      
+      const blob = new Blob([excelBuffer], { 
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+      })
+      
+      return {
+        success: true,
+        blob,
+        filename: `claims_export_${new Date().toISOString().split('T')[0]}.xlsx`,
+        recordCount: data.length
+      }
+      
+    } catch (error) {
+      throw new Error(`Excel export failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 
@@ -235,15 +270,56 @@ export class DataExporter {
   }
 
   private async exportToPDF(data: ClaimData[], options: ExportOptions): Promise<ExportResult> {
-    // Simulate PDF export (would use a library like jsPDF in real implementation)
-    const pdfContent = this.generatePDFContent(data, options)
-    const blob = new Blob([pdfContent], { type: 'application/pdf' })
-    
-    return {
-      success: true,
-      blob,
-      filename: `claims_report_${new Date().toISOString().split('T')[0]}.pdf`,
-      recordCount: data.length
+    try {
+      const doc = new jsPDF()
+      const isArabic = options.language === 'ar'
+      
+      // Set font for Arabic support (would need to load Arabic font in real implementation)
+      doc.setFont('helvetica')
+      
+      // Add title
+      doc.setFontSize(16)
+      const title = isArabic ? 'تقرير المطالبات الطبية' : 'Healthcare Claims Report'
+      doc.text(title, 20, 20)
+      
+      // Add metadata
+      doc.setFontSize(10)
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 30)
+      doc.text(`Total Records: ${data.length.toLocaleString()}`, 20, 35)
+      
+      // Add summary section
+      const summary = this.generateSummary(data, isArabic)
+      const summaryLines = summary.split('\n')
+      summaryLines.forEach((line, index) => {
+        doc.text(line, 20, 50 + (index * 5))
+      })
+      
+      // Add table of claims data
+      const tableData = this.prepareDataForPDFTable(data, options)
+      
+      // Use autoTable for better table formatting
+      autoTable(doc, {
+        head: [tableData.headers],
+        body: tableData.rows,
+        startY: 50 + (summaryLines.length * 5) + 10,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [66, 139, 202] },
+        alternateRowStyles: { fillColor: [245, 245, 245] },
+        margin: { top: 20, right: 20, bottom: 20, left: 20 }
+      })
+      
+      // Convert to blob
+      const pdfOutput = doc.output('blob')
+      
+      return {
+        success: true,
+        blob: pdfOutput,
+        filename: `claims_report_${new Date().toISOString().split('T')[0]}.pdf`,
+        recordCount: data.length
+      }
+      
+    } catch (error) {
+      throw new Error(`PDF export failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 
@@ -455,6 +531,53 @@ Summary:
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
+  }
+
+  // Helper methods for enhanced export functionality
+
+  private prepareDataForExcel(data: ClaimData[], options: ExportOptions): any[][] {
+    const headers = this.getExportHeaders(options)
+    const rows = data.map(claim => this.formatClaimForExport(claim, options))
+    
+    return [headers, ...rows]
+  }
+
+  private formatExcelWorksheet(worksheet: XLSX.WorkSheet, columnCount: number): void {
+    // Set column widths
+    const columnWidths = Array(columnCount).fill({ wch: 15 })
+    worksheet['!cols'] = columnWidths
+    
+    // Add freeze panes for header row
+    worksheet['!freeze'] = { xSplit: 0, ySplit: 1 }
+  }
+
+  private createSummarySheet(data: ClaimData[], options: ExportOptions): any[][] {
+    const isArabic = options.language === 'ar'
+    const totalAmount = data.reduce((sum, claim) => sum + claim.amount, 0)
+    const rejectedClaims = data.filter(claim => claim.status === 'rejected')
+    const rejectedAmount = rejectedClaims.reduce((sum, claim) => sum + claim.amount, 0)
+    const rejectionRate = data.length > 0 ? (rejectedClaims.length / data.length) * 100 : 0
+    
+    const summaryData = [
+      [isArabic ? 'ملخص البيانات' : 'Data Summary', ''],
+      ['', ''],
+      [isArabic ? 'إجمالي المطالبات' : 'Total Claims', data.length.toLocaleString()],
+      [isArabic ? 'إجمالي المبلغ' : 'Total Amount', `${totalAmount.toLocaleString()} ${isArabic ? 'ريال' : 'SAR'}`],
+      [isArabic ? 'المطالبات المرفوضة' : 'Rejected Claims', rejectedClaims.length.toLocaleString()],
+      [isArabic ? 'مبلغ الرفوضات' : 'Rejected Amount', `${rejectedAmount.toLocaleString()} ${isArabic ? 'ريال' : 'SAR'}`],
+      [isArabic ? 'معدل الرفض' : 'Rejection Rate', `${rejectionRate.toFixed(1)}%`],
+      ['', ''],
+      [isArabic ? 'تاريخ التصدير' : 'Export Date', new Date().toLocaleDateString()],
+    ]
+    
+    return summaryData
+  }
+
+  private prepareDataForPDFTable(data: ClaimData[], options: ExportOptions): { headers: string[]; rows: string[][] } {
+    const headers = this.getExportHeaders(options)
+    const rows = data.slice(0, 50).map(claim => this.formatClaimForExport(claim, options)) // Limit to 50 rows for PDF
+    
+    return { headers, rows }
   }
 }
 

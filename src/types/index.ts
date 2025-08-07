@@ -109,4 +109,135 @@ export interface AnalysisResult {
     rejections: number
     amount: number
   }[]
+  // Enhanced analysis features
+  statisticalAnalysis?: StatisticalAnalysis
+  trendAnalysis?: TrendAnalysis
+  comparativeAnalysis?: ComparativeAnalysis
+  predictionResults?: PredictionResults
+}
+
+export interface StatisticalAnalysis {
+  claimAmounts: {
+    mean: number
+    median: number
+    standardDeviation: number
+    min: number
+    max: number
+    quartiles: [number, number, number]
+  }
+  processingTimes: {
+    mean: number
+    median: number
+    standardDeviation: number
+  }
+  correlations: {
+    amountVsProcessingTime: number
+    rejectionRateByProvider: { [providerId: string]: number }
+  }
+  outliers: {
+    highValueClaims: ClaimData[]
+    longProcessingClaims: ClaimData[]
+  }
+}
+
+export interface TrendAnalysis {
+  monthlyTrends: {
+    month: string
+    totalClaims: number
+    rejectedClaims: number
+    averageAmount: number
+    rejectionRate: number
+    trend: 'increasing' | 'decreasing' | 'stable'
+  }[]
+  seasonalPatterns: {
+    season: 'Q1' | 'Q2' | 'Q3' | 'Q4'
+    averageClaims: number
+    averageRejectionRate: number
+  }[]
+  yearOverYearComparison?: {
+    currentYear: number
+    previousYear: number
+    growthRate: number
+    rejectionRateChange: number
+  }
+}
+
+export interface ComparativeAnalysis {
+  providerComparison: {
+    providerId: string
+    providerName: string
+    totalClaims: number
+    rejectionRate: number
+    averageAmount: number
+    ranking: number
+    benchmarkComparison: 'above' | 'below' | 'at' // compared to industry average
+  }[]
+  categoryComparison: {
+    category: 'medical' | 'technical'
+    subcategory: string
+    frequency: number
+    impact: 'high' | 'medium' | 'low'
+    trend: 'increasing' | 'decreasing' | 'stable'
+  }[]
+  timeComparison: {
+    currentPeriod: {
+      startDate: string
+      endDate: string
+      totalClaims: number
+      rejectionRate: number
+    }
+    previousPeriod: {
+      startDate: string
+      endDate: string
+      totalClaims: number
+      rejectionRate: number
+    }
+    percentageChange: number
+  }
+}
+
+export interface PredictionResults {
+  claimApprovalModel: {
+    accuracy: number
+    predictions: {
+      claimId: string
+      predictedStatus: 'approved' | 'rejected'
+      confidence: number
+      riskFactors: string[]
+    }[]
+  }
+  fraudDetection: {
+    suspiciousClaims: {
+      claimId: string
+      riskScore: number
+      riskLevel: 'high' | 'medium' | 'low'
+      flags: string[]
+    }[]
+    overallFraudRate: number
+  }
+  costPrediction: {
+    nextPeriodEstimate: number
+    confidence: number
+    factors: string[]
+  }
+  trendForecasting: {
+    nextMonthPrediction: {
+      expectedClaims: number
+      expectedRejectionRate: number
+      confidence: number
+    }
+    nextQuarterPrediction: {
+      expectedClaims: number
+      expectedRejectionRate: number
+      confidence: number
+    }
+  }
+}
+
+// Enhanced ClaimData with ML features
+export interface EnhancedClaimData extends ClaimData {
+  predictionScore?: number
+  riskLevel?: 'low' | 'medium' | 'high'
+  fraudProbability?: number
+  recommendedAction?: string
 }

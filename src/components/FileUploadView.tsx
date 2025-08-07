@@ -217,7 +217,7 @@ export function FileUploadView() {
                   {dragActive ? 'Drop files here' : t('upload.dragDrop')}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {t('upload.formats')} • Max 100MB per file
+                  {t('upload.formats')} • Max 100MB per file • Now supports JSON!
                 </p>
               </div>
               
@@ -225,7 +225,7 @@ export function FileUploadView() {
                 ref={fileInputRef}
                 type="file"
                 multiple
-                accept=".pdf,.xlsx,.xls,.csv"
+                accept=".pdf,.xlsx,.xls,.csv,.json"
                 className="hidden"
                 onChange={(e) => handleFileSelect(e.target.files)}
               />
@@ -432,7 +432,7 @@ export function FileUploadView() {
             <CardTitle className="text-lg">Supported File Formats</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               <div className="text-center p-3 border rounded-lg">
                 <FileText className="w-8 h-8 mx-auto mb-2 text-red-500" />
                 <p className="font-medium">PDF Files</p>
@@ -447,6 +447,11 @@ export function FileUploadView() {
                 <FileText className="w-8 h-8 mx-auto mb-2 text-blue-500" />
                 <p className="font-medium">CSV Files</p>
                 <p className="text-xs text-muted-foreground">Comma-separated data</p>
+              </div>
+              <div className="text-center p-3 border rounded-lg">
+                <FileText className="w-8 h-8 mx-auto mb-2 text-orange-500" />
+                <p className="font-medium">JSON Files</p>
+                <p className="text-xs text-muted-foreground">Structured claim data</p>
               </div>
               <div className="text-center p-3 border rounded-lg">
                 <Eye className="w-8 h-8 mx-auto mb-2 text-purple-500" />
