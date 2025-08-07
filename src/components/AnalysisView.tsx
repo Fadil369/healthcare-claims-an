@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useKV } from '@github/spark/hooks'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -6,13 +6,32 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Progress } from '@/components/ui/progress'
-import { TrendingUp, TrendingDown, Minus, AlertTriangle, Activity, Calendar } from '@phosphor-icons/react'
-import { ClaimData, RejectionPattern } from '@/types'
+import { Button } from '@/components/ui/button'
+import { TrendingUp, TrendingDown, Minus, AlertTriangle, Activity, Calendar, Gear, ChartBar } from '@phosphor-icons/react'
+import { rejectionRulesEngine } from '@/lib/rejectionRulesEngine'
+import { ClaimData, RejectionPattern, RejectionAnalysis, RejectionRule, InsuranceProvider } from '@/types'
 
 export function AnalysisView() {
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
   const [claimsData] = useKV<ClaimData[]>('claims-data', [])
+  const [globalRules] = useKV<RejectionRule[]>('global-rejection-rules', [])
+  const [providers] = useKV<InsuranceProvider[]>('insurance-providers', [])
   const [timeRange, setTimeRange] = useState('30')
+  const [selectedProvider, setSelectedProvider] = useState<string>('all')
+  const [rejectionAnalysis, setRejectionAnalysis] = useState<RejectionAnalysis[]>([])
+  
+  // Update rules engine when rules or providers change
+  useEffect(() => {
+    rejectionRulesEngine.updateRules(globalRules, providers)
+  }, [globalRules, providers])
+
+  // Run analysis when data changes
+  useEffect(() => {
+    if (claimsData.length > 0) {
+      const analysis = rejectionRulesEngine.analyzeClaims(claimsData)
+      setRejectionAnalysis(analysis)
+    }
+  }, [claimsData, globalRules, providers])
   
   const analysisData = useMemo(() => {
     if (!claimsData.length) return null
@@ -20,18 +39,36 @@ export function AnalysisView() {
     // Filter by time range
     const cutoffDate = new Date()
     cutoffDate.setDate(cutoffDate.getDate() - parseInt(timeRange))
-    const filteredData = claimsData.filter(
+    let filteredData = claimsData.filter(
       claim => new Date(claim.submissionDate) >= cutoffDate
     )
+
+    // Filter by provider if selected
+    if (selectedProvider !== 'all') {
+      filteredData = filteredData.filter(claim => claim.providerId === selectedProvider)
+    }
     
     const rejectedClaims = filteredData.filter(claim => claim.status === 'rejected')
     
-    // Rejection patterns
+    // Enhanced rejection patterns using rules engine
+    const patterns: RejectionPattern[] = []
+    
+    // Use rules-based categorization
+    rejectedClaims.forEach(claim => {
+      const categorization = rejectionRulesEngine.categorizeRejection(
+        claim.rejectionReason || '',
+        claim.providerId,
+        [claim.diagnosisCode, claim.procedureCode].filter(Boolean)
+      )
+      
+      // Update claim with better categorization
+      claim.rejectionCategory = categorization.category
+      claim.rejectionSubcategory = categorization.subcategory
+    })
+    
+    // Rebuild patterns with enhanced categorization
     const medicalRejections = rejectedClaims.filter(claim => claim.rejectionCategory === 'medical')
     const technicalRejections = rejectedClaims.filter(claim => claim.rejectionCategory === 'technical')
-    
-    // Pattern analysis
-    const patterns: RejectionPattern[] = []
     
     // Medical patterns
     const medicalReasons = medicalRejections.reduce((acc, claim) => {
@@ -123,7 +160,7 @@ export function AnalysisView() {
       providerAnalysis,
       trends
     }
-  }, [claimsData, timeRange])
+  }, [claimsData, timeRange, selectedProvider])
   
   if (!analysisData) {
     return (
@@ -166,19 +203,37 @@ export function AnalysisView() {
           </p>
         </div>
         
-        <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-muted-foreground" />
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="30">Last 30 days</SelectItem>
-              <SelectItem value="60">Last 60 days</SelectItem>
-              <SelectItem value="90">Last 90 days</SelectItem>
-              <SelectItem value="180">Last 6 months</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-muted-foreground">Provider:</label>
+            <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Providers</SelectItem>
+                {providers.map(provider => (
+                  <SelectItem key={provider.id} value={provider.id}>
+                    {language === 'ar' ? provider.nameAr : provider.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-muted-foreground" />
+            <Select value={timeRange} onValueChange={setTimeRange}>
+              <SelectTrigger className="w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="30">{language === 'ar' ? 'آخر 30 يوم' : 'Last 30 days'}</SelectItem>
+                <SelectItem value="60">{language === 'ar' ? 'آخر 60 يوم' : 'Last 60 days'}</SelectItem>
+                <SelectItem value="90">{language === 'ar' ? 'آخر 90 يوم' : 'Last 90 days'}</SelectItem>
+                <SelectItem value="180">{language === 'ar' ? 'آخر 6 أشهر' : 'Last 6 months'}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
       
@@ -224,10 +279,11 @@ export function AnalysisView() {
       </div>
       
       <Tabs defaultValue="patterns" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="patterns">{t('analysis.patterns')}</TabsTrigger>
-          <TabsTrigger value="providers">{t('analysis.byProvider')}</TabsTrigger>
-          <TabsTrigger value="trends">{t('analysis.trends')}</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="patterns">{language === 'ar' ? 'الأنماط' : 'Patterns'}</TabsTrigger>
+          <TabsTrigger value="rules">{language === 'ar' ? 'تحليل القواعد' : 'Rules Analysis'}</TabsTrigger>
+          <TabsTrigger value="providers">{language === 'ar' ? 'مقدمو الخدمة' : 'Providers'}</TabsTrigger>
+          <TabsTrigger value="trends">{language === 'ar' ? 'الاتجاهات' : 'Trends'}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="patterns" className="space-y-6">
@@ -303,6 +359,133 @@ export function AnalysisView() {
                   ))}
               </CardContent>
             </Card>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="rules" className="space-y-6">
+          <div className="grid gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Gear className="w-5 h-5 text-primary" />
+                  {language === 'ar' ? 'تحليل القواعد المطبقة' : 'Applied Rules Analysis'}
+                </CardTitle>
+                <CardDescription>
+                  {language === 'ar' 
+                    ? 'تحليل الرفوضات باستخدام قواعد التصنيف المخصصة' 
+                    : 'Rejection analysis using custom categorization rules'
+                  }
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {rejectionAnalysis.length === 0 ? (
+                  <div className="text-center py-8">
+                    <ChartBar className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">
+                      {language === 'ar' 
+                        ? 'لا توجد قواعد مطبقة أو لا توجد رفوضات للتحليل'
+                        : 'No applied rules or rejections to analyze'
+                      }
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {rejectionAnalysis.slice(0, 10).map((analysis, index) => (
+                      <div key={analysis.ruleId} className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-foreground">
+                              {analysis.ruleName}
+                            </h3>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {analysis.suggestedAction}
+                            </p>
+                          </div>
+                          <Badge variant="secondary">
+                            {language === 'ar' ? 'الثقة' : 'Confidence'}: {(analysis.confidence * 100).toFixed(0)}%
+                          </Badge>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <div className="text-muted-foreground">
+                              {language === 'ar' ? 'المطالبات المتأثرة' : 'Affected Claims'}
+                            </div>
+                            <div className="font-medium text-destructive">
+                              {analysis.matches.length.toLocaleString()}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-muted-foreground">
+                              {language === 'ar' ? 'المبلغ المتأثر' : 'Affected Amount'}
+                            </div>
+                            <div className="font-medium">
+                              {analysis.matches.reduce((sum, claim) => sum + claim.amount, 0).toLocaleString()} {language === 'ar' ? 'ريال' : 'SAR'}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-muted-foreground">
+                              {language === 'ar' ? 'التوفير المقدر' : 'Estimated Savings'}
+                            </div>
+                            <div className="font-medium text-secondary">
+                              {analysis.estimatedSavings.toLocaleString()} {language === 'ar' ? 'ريال' : 'SAR'}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between pt-2">
+                          <Progress 
+                            value={(analysis.matches.length / analysisData.rejectedClaims) * 100} 
+                            className="h-2 flex-1 mr-4" 
+                          />
+                          <span className="text-xs text-muted-foreground">
+                            {((analysis.matches.length / analysisData.rejectedClaims) * 100).toFixed(1)}% {language === 'ar' ? 'من الرفوضات' : 'of rejections'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            
+            {rejectionAnalysis.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {language === 'ar' ? 'ملخص التحليل' : 'Analysis Summary'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-primary">
+                        {rejectionAnalysis.length}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {language === 'ar' ? 'قواعد مطبقة' : 'Rules Applied'}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-secondary">
+                        {rejectionAnalysis.reduce((sum, a) => sum + a.estimatedSavings, 0).toLocaleString()}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {language === 'ar' ? 'إجمالي التوفير المقدر (ريال)' : 'Total Estimated Savings (SAR)'}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-accent">
+                        {rejectionAnalysis.reduce((sum, a) => sum + a.matches.length, 0).toLocaleString()}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {language === 'ar' ? 'مطالبات قابلة للإصلاح' : 'Fixable Claims'}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </TabsContent>
         

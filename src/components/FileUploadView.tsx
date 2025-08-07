@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Upload, FileText, CheckCircle, AlertCircle } from '@phosphor-icons/react'
+import { Upload, FileText, CheckCircle, AlertCircle, Database } from '@phosphor-icons/react'
 import { ClaimData } from '@/types'
+import { sampleClaimsData } from '@/lib/sampleData'
 import { toast } from 'sonner'
 
 export function FileUploadView() {
@@ -45,6 +46,12 @@ export function FileUploadView() {
   
   const removeFile = (index: number) => {
     setFiles(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const loadSampleData = () => {
+    setClaimsData(sampleClaimsData)
+    setLastProcessed(new Date().toISOString())
+    toast.success('Sample data loaded successfully!')
   }
   
   const processFiles = async () => {
@@ -195,7 +202,7 @@ export function FileUploadView() {
           </Card>
         )}
         
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
           <Button
             onClick={processFiles}
             disabled={files.length === 0 || isProcessing}
@@ -204,6 +211,17 @@ export function FileUploadView() {
           >
             <Upload className="w-5 h-5" />
             {t('upload.button')}
+          </Button>
+          
+          <Button
+            onClick={loadSampleData}
+            disabled={isProcessing}
+            variant="outline"
+            size="lg"
+            className="gap-2"
+          >
+            <Database className="w-5 h-5" />
+            Load Sample Data
           </Button>
         </div>
         

@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Activity, FileText, BarChart3, Lightbulb, Languages } from '@phosphor-icons/react'
+import { Activity, FileText, BarChart3, Lightbulb, Languages, Gear } from '@phosphor-icons/react'
 
 interface HeaderProps {
   activeView: string
@@ -16,6 +16,7 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
     { id: 'dashboard', label: t('header.dashboard'), icon: Activity },
     { id: 'analysis', label: t('header.analysis'), icon: BarChart3 },
     { id: 'insights', label: t('header.insights'), icon: Lightbulb },
+    { id: 'rules', label: t('header.rules'), icon: Gear },
   ]
   
   return (

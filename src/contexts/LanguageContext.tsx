@@ -18,6 +18,7 @@ const translations = {
     'header.dashboard': 'Dashboard',
     'header.analysis': 'Analysis',
     'header.insights': 'Insights',
+    'header.rules': 'Rules',
     
     // Upload
     'upload.title': 'Upload Insurance Files',
@@ -88,6 +89,7 @@ const translations = {
     'header.dashboard': 'لوحة القيادة',
     'header.analysis': 'التحليل',
     'header.insights': 'الرؤى',
+    'header.rules': 'القواعد',
     
     // Upload
     'upload.title': 'رفع ملفات التأمين',
