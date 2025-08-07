@@ -19,6 +19,7 @@ const translations = {
     'header.analysis': 'Analysis',
     'header.insights': 'Insights',
     'header.rules': 'Rules',
+    'header.categories': 'Categories',
     
     // Navigation
     'navigation': 'Navigation',
@@ -94,6 +95,7 @@ const translations = {
     'header.analysis': 'التحليل',
     'header.insights': 'الرؤى',
     'header.rules': 'القواعد',
+    'header.categories': 'الفئات',
     
     // Navigation
     'navigation': 'التنقل',

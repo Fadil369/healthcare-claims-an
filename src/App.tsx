@@ -7,6 +7,7 @@ import { DashboardView } from '@/components/DashboardView'
 import { AnalysisView } from '@/components/AnalysisView'
 import { InsightsView } from '@/components/InsightsView'
 import { RejectionRulesView } from '@/components/RejectionRulesView'
+import { RejectionCategoriesView } from '@/components/RejectionCategoriesView'
 import { Toaster } from '@/components/ui/sonner'
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
         return <InsightsView />
       case 'rules':
         return <RejectionRulesView />
+      case 'categories':
+        return <RejectionCategoriesView />
       default:
         return <FileUploadView />
     }

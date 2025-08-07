@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Activity, FileText, BarChart3, Lightbulb, Languages, Gear } from '@phosphor-icons/react'
+import { Activity, FileText, BarChart3, Lightbulb, Languages, Gear, Tag } from '@phosphor-icons/react'
 import { MobileNavbar } from '@/components/MobileNavbar'
 
 interface HeaderProps {
@@ -18,6 +18,7 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
     { id: 'analysis', label: t('header.analysis'), icon: BarChart3 },
     { id: 'insights', label: t('header.insights'), icon: Lightbulb },
     { id: 'rules', label: t('header.rules'), icon: Gear },
+    { id: 'categories', label: t('header.categories'), icon: Tag },
   ]
   
   return (
@@ -39,23 +40,25 @@ export function Header({ activeView, onViewChange }: HeaderProps) {
           </div>
           
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => {
-              const Icon = item.icon
-              return (
-                <Button
-                  key={item.id}
-                  variant={activeView === item.id ? 'default' : 'ghost'}
-                  onClick={() => onViewChange(item.id)}
-                  className="gap-2 h-9"
-                  size="sm"
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden xl:inline">{item.label}</span>
-                </Button>
-              )
-            })}
-          </nav>
+          <div className="hidden lg:flex items-center">
+            <nav className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Button
+                    key={item.id}
+                    variant={activeView === item.id ? 'default' : 'ghost'}
+                    onClick={() => onViewChange(item.id)}
+                    className="gap-2 h-9 flex-shrink-0"
+                    size="sm"
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span className="hidden xl:inline">{item.label}</span>
+                  </Button>
+                )
+              })}
+            </nav>
+          </div>
           
           {/* Language Selector */}
           <div className="flex items-center gap-2">
