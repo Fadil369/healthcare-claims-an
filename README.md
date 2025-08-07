@@ -76,9 +76,12 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ### GitHub Copilot Integration
 This repository is configured with GitHub Copilot settings to improve code suggestions:
-- Preferred languages: TypeScript, JavaScript, CSS, HTML
-- Domain-specific context for healthcare analytics
-- Coding standards alignment with BrainSAIT practices
+- **Configuration Files**: `.copilot/settings.json` with project context
+- **Editor Config**: `.editorconfig` for consistent formatting
+- **Contribution Guide**: `CONTRIBUTING.md` with detailed coding standards
+- **Preferred Languages**: TypeScript, JavaScript, CSS, HTML
+- **Domain Context**: Healthcare analytics with bilingual support
+- **BrainSAIT Standards**: Aligned coding practices and patterns
 
 ### Best Practices
 - Reference: [Best practices for Copilot coding agent](https://gh.io/copilot-coding-agent-tips)

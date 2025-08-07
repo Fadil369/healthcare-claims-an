@@ -1,134 +1,75 @@
 # Contributing to Healthcare Claims Analyzer
 
-## Overview
-
-This repository contains a bilingual (English/Arabic) healthcare claims analysis tool designed for the Saudi market. We welcome contributions that improve the system's functionality, user experience, and analytical capabilities.
-
 ## Coding Guidelines
 
 ### General Standards
-- Use TypeScript for all new features
-- Write clear, modular, and testable code
-- Follow the existing architecture patterns
-- Ensure bilingual support (English/Arabic) in all user-facing features
-- Add comprehensive comments for complex logic
-
-### Naming Conventions
-- **Variables and functions**: camelCase (`getUserData`, `claimTotal`)
-- **Components**: PascalCase (`DashboardView`, `AnalysisChart`)
-- **Types and interfaces**: PascalCase (`ClaimData`, `RejectionRule`)
-- **Constants**: UPPER_SNAKE_CASE (`MAX_FILE_SIZE`, `API_ENDPOINTS`)
-- **Files**: kebab-case for utility files, PascalCase for components
-
-### Code Style
-- **Indentation**: 2 spaces for JS/TS/TSX/CSS, 4 spaces for others
-- **Quotes**: Single quotes for JavaScript/TypeScript
-- **Semicolons**: Always use semicolons
-- **Line length**: Maximum 100 characters
-- **Imports**: Group and sort imports (external libraries first, then internal modules)
+- Use TypeScript for all new features and components
+- Use camelCase for variables and functions
+- Use PascalCase for React components, types, and interfaces
+- Indentation: 2 spaces for JS/TS/TSX, 4 spaces for others
+- Write clear, modular, testable code
+- Add JSDoc/TSDoc comments to all functions and classes
+- Never hardcode secrets—use environment variables
+- Organize code by domain and feature
 
 ### React/TypeScript Specific
 - Use functional components with hooks
-- Prefer `const` over `let` where possible
-- Use proper TypeScript types instead of `any`
+- Prefer named exports over default exports for components
+- Use proper TypeScript types and interfaces
 - Implement proper error boundaries
-- Use React.memo() for performance optimization where beneficial
-- Prefer custom hooks for complex state logic
+- Use the useKV hook for persistent data storage
+- Follow the existing component structure and patterns
 
-### Documentation
-- Add JSDoc/TSDoc comments to all exported functions and components
-- Document complex algorithms and business logic
-- Include examples in documentation for utility functions
-- Keep README files updated with new features
-
-### Security & Best Practices
-- Never hardcode secrets—use environment variables
-- Sanitize all user inputs
-- Implement proper error handling
-- Use HTTPS for all external API calls
-- Follow OWASP security guidelines for healthcare data
-
-### Healthcare Domain Specific
-- Ensure HIPAA compliance considerations
-- Validate all medical data formats
-- Implement proper audit logging for claims processing
-- Follow Saudi healthcare regulations and standards
-
-## Architecture Guidelines
+### Styling Guidelines
+- Use Tailwind utility classes for styling
+- Follow the design system defined in index.css
+- Use shadcn components when available
+- Maintain responsive design principles
+- Ensure proper contrast ratios for accessibility
 
 ### File Organization
-```
-src/
-├── components/          # Reusable UI components
-├── contexts/           # React contexts
-├── hooks/             # Custom React hooks
-├── types/             # TypeScript type definitions
-├── utils/             # Utility functions
-├── assets/            # Static assets
-└── lib/               # External library configurations
-```
+- Components in `/src/components/`
+- Utility functions in `/src/lib/`
+- Context providers in `/src/contexts/`
+- Types and interfaces in appropriate component files
+- Assets in `/src/assets/` with proper subdirectories
 
-### State Management
-- Use React Context for global state (language, theme)
-- Use `useKV` hook for persistent data
-- Use `useState` for local component state
-- Implement proper loading and error states
+### Code Quality
+- Write self-documenting code with clear variable names
+- Implement proper error handling and validation
+- Use proper loading states and user feedback
+- Follow SOLID principles where applicable
+- Ensure mobile-first responsive design
 
-### Data Processing
-- Implement robust file parsing for PDF and Excel
-- Use streaming for large file processing
-- Implement proper validation for claims data
-- Cache processed results when appropriate
+### Security Best Practices
+- Validate all user inputs
+- Use secure file upload practices
+- Implement proper data sanitization
+- Never expose sensitive data in client-side code
+- Use environment variables for configuration
 
 ## Pull Request Process
 
-1. **Branch Creation**: Create a feature branch from `main`
-   ```bash
-   git checkout -b feature/description-of-feature
-   ```
+1. Branch off main with descriptive branch names
+2. Ensure your code passes all tests and linters
+3. Write clear PR descriptions explaining changes
+4. Include screenshots for UI changes
+5. Test on multiple screen sizes and browsers
+6. Ensure accessibility standards are met
 
-2. **Development**: 
-   - Write clean, tested code following the guidelines above
-   - Ensure bilingual support where applicable
-   - Test with sample healthcare data
+## Code Review Standards
 
-3. **Testing**:
-   - Verify all existing functionality still works
-   - Test new features thoroughly
-   - Ensure responsive design works on mobile and desktop
-   - Test with different file formats and sizes
+- Focus on code clarity and maintainability
+- Verify proper TypeScript usage
+- Check for security vulnerabilities
+- Ensure consistent styling and patterns
+- Validate accessibility compliance
+- Test functionality thoroughly
 
-4. **Documentation**: Update relevant documentation and comments
+## Healthcare Domain Considerations
 
-5. **Submission**:
-   - Write clear PR descriptions explaining the changes
-   - Reference any related issues
-   - Include screenshots for UI changes
-   - Request review from maintainers
-
-## Code Review Checklist
-
-- [ ] Code follows established patterns and guidelines
-- [ ] Proper TypeScript types are used
-- [ ] Bilingual support is implemented where needed
-- [ ] Error handling is comprehensive
-- [ ] Performance considerations are addressed
-- [ ] Security best practices are followed
-- [ ] Documentation is updated
-- [ ] No hardcoded values or secrets
-- [ ] Accessibility standards are met
-
-## Development Setup
-
-1. Clone the repository
-2. Install dependencies with `npm install`
-3. Follow the setup instructions in README.md
-4. Use the development server for testing
-
-## Questions and Support
-
-If you have questions about contributing or need clarification on any guidelines, please open an issue or contact the maintainers.
-
-## License
-
-By contributing to this project, you agree that your contributions will be licensed under the same license as the project.
+- Understand insurance claim terminology
+- Respect data privacy and security requirements
+- Implement proper data validation for healthcare data
+- Consider bilingual support (English/Arabic)
+- Follow healthcare industry best practices
