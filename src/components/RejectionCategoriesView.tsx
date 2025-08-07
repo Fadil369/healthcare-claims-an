@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Edit, Trash, Gear, Building, Warning, CheckCircle, Clock, Download, Upload, Copy, Search, Funnel } from '@phosphor-icons/react'
+import { Plus, Pencil, Trash, Gear, Building, Warning, CheckCircle, Clock, Download, Upload, ClipboardText, MagnifyingGlass, Funnel } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import type { RejectionRule, InsuranceProvider } from '@/types'
 
@@ -210,7 +210,7 @@ const enhancedSaudiProviders: InsuranceProvider[] = [
 export function RejectionCategoriesView() {
   const { language, t } = useLanguage()
   const [providers, setProviders] = useKV<InsuranceProvider[]>('insurance-providers-enhanced', enhancedSaudiProviders)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setMagnifyingGlassTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'medical' | 'technical'>('all')
   const [selectedProvider, setSelectedProvider] = useState<string>('')
   const [isCreateCategoryOpen, setIsCreateCategoryOpen] = useState(false)
@@ -568,16 +568,16 @@ export function RejectionCategoriesView() {
         </div>
       </div>
 
-      {/* Search and Funnel Section */}
+      {/* MagnifyingGlass and Funnel Section */}
       <div className="space-y-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={language === 'ar' ? 'البحث في الفئات...' : 'Search categories...'}
+                placeholder={language === 'ar' ? 'البحث في الفئات...' : 'MagnifyingGlass categories...'}
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => setMagnifyingGlassTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -653,7 +653,7 @@ export function RejectionCategoriesView() {
                             onClick={() => copyCategory(key, 'medical')}
                             className="h-8 w-8 p-0"
                           >
-                            <Copy className="h-4 w-4" />
+                            <ClipboardText className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
@@ -720,7 +720,7 @@ export function RejectionCategoriesView() {
                             onClick={() => copyCategory(key, 'technical')}
                             className="h-8 w-8 p-0"
                           >
-                            <Copy className="h-4 w-4" />
+                            <ClipboardText className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>

@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Edit, Trash, Gear, Building, Warning, CheckCircle, Clock, Download, Upload } from '@phosphor-icons/react'
+import { Plus, Pencil, Trash, Gear, Building, Warning, CheckCircle, Clock, Download, Upload } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { defaultSaudiRejectionRules } from '@/lib/defaultRejectionRules'
 import type { RejectionRule, InsuranceProvider } from '@/types'
@@ -72,7 +72,7 @@ export function RejectionRulesView() {
   const [selectedProvider, setSelectedProvider] = useState<string>('')
   const [isCreateRuleOpen, setIsCreateRuleOpen] = useState(false)
   const [isCreateProviderOpen, setIsCreateProviderOpen] = useState(false)
-  const [editingRule, setEditingRule] = useState<RejectionRule | null>(null)
+  const [editingRule, setPencilingRule] = useState<RejectionRule | null>(null)
 
   const [newRule, setNewRule] = useState<Partial<RejectionRule>>({
     name: '',
@@ -835,7 +835,7 @@ export function RejectionRulesView() {
                             onCheckedChange={() => handleToggleRule(rule.id, false)}
                           />
                           <Button variant="outline" size="sm">
-                            <Edit className="h-4 w-4" />
+                            <Pencil className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
@@ -890,7 +890,7 @@ export function RejectionRulesView() {
                         onCheckedChange={() => handleToggleRule(rule.id, true)}
                       />
                       <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
+                        <Pencil className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>

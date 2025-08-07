@@ -16,7 +16,7 @@ import {
   FileText, 
   Table, 
   FileCsv, 
-  FileX, 
+  File, 
   Calendar as CalendarIcon,
   Funnel,
   Gear,
@@ -208,7 +208,7 @@ export function ExportControls({
               { value: 'xlsx', icon: FileCsv, label: 'Excel', color: 'text-green-600' },
               { value: 'csv', icon: Table, label: 'CSV', color: 'text-blue-600' },
               { value: 'pdf', icon: FileText, label: 'PDF', color: 'text-red-600' },
-              { value: 'json', icon: FileX, label: 'JSON', color: 'text-purple-600' }
+              { value: 'json', icon: File, label: 'JSON', color: 'text-purple-600' }
             ].map(({ value, icon: Icon, label, color }) => (
               <Button
                 key={value}
