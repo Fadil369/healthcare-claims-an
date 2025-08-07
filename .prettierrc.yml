@@ -1,0 +1,42 @@
+# Prettier Configuration for Healthcare Claims Analyzer
+# Optimized for TypeScript, React, and bilingual development
+
+# Basic formatting
+semi: true
+singleQuote: true
+trailingComma: es5
+tabWidth: 2
+useTabs: false
+
+# Line length optimized for mobile-first development
+printWidth: 100
+
+# JSX formatting
+jsxSingleQuote: false
+bracketSpacing: true
+bracketSameLine: false
+arrowParens: avoid
+
+# File endings
+endOfLine: lf
+
+# Plugin configurations
+plugins:
+  - prettier-plugin-tailwindcss
+
+# Tailwind class sorting
+tailwindConfig: ./tailwind.config.js
+tailwindFunctions: ['cn', 'clsx', 'cva']
+
+# Override specific file types
+overrides:
+  - files: '*.json'
+    options:
+      tabWidth: 2
+  - files: '*.md'
+    options:
+      proseWrap: always
+      printWidth: 80
+  - files: '*.css'
+    options:
+      printWidth: 120

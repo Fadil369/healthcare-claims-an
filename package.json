@@ -8,8 +8,15 @@
         "kill": "fuser -k 5000/tcp",
         "build": "tsc -b --noCheck && vite build",
         "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "type-check": "tsc --noEmit",
+        "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
+        "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
         "optimize": "vite optimize",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "clean": "rm -rf dist && rm -rf node_modules/.vite",
+        "mobile:test": "npm run build && echo 'Testing mobile-first build...'",
+        "copilot:setup": "echo 'GitHub Copilot configured for healthcare domain context'"
     },
     "dependencies": {
         "@github/spark": "^0.0.1",

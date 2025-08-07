@@ -1,6 +1,6 @@
 {
   "preferredLanguages": ["typescript", "javascript", "css", "html"],
-  "frameworks": ["react", "tailwindcss"],
+  "frameworks": ["react", "tailwindcss", "vite"],
   "codingStyle": {
     "naming": "camelCase",
     "indentation": 2,
@@ -10,17 +10,33 @@
     "accessibility": "WCAG-AA"
   },
   "patterns": {
-    "components": "Use shadcn/ui components as base",
+    "components": "Use shadcn/ui components as base with proper mobile adaptation",
     "state": "useKV for persistence, useState for temporary",
-    "styling": "Tailwind utility classes with responsive prefixes",
-    "layout": "Mobile-first grid and flexbox layouts",
-    "navigation": "Mobile sidebar, desktop header navigation"
+    "styling": "Tailwind utility classes with responsive prefixes (sm:, md:, lg:, xl:)",
+    "layout": "Mobile-first grid and flexbox layouts with proper breakpoints",
+    "navigation": "Mobile sidebar with hamburger menu, desktop header navigation",
+    "exports": "Export functionality for PDF, Excel and JSON formats",
+    "uploads": "Multi-file upload with progress tracking and validation"
   },
   "healthcareSpecific": {
-    "compliance": "Saudi CCHI regulations",
+    "compliance": "Saudi CCHI regulations and HIPAA considerations",
     "languages": ["en", "ar"],
     "rtlSupport": true,
-    "dataPrivacy": "Local processing only",
-    "fileTypes": ["pdf", "xlsx", "csv"]
+    "dataPrivacy": "Local processing only, no external data transmission",
+    "fileTypes": ["pdf", "xlsx", "csv"],
+    "rejectionCategories": "Support custom categorization with Arabic translations",
+    "analytics": "LLM-powered analysis for claims patterns and insights"
+  },
+  "domainContext": {
+    "repository": "healthcare-claims-analyzer",
+    "purpose": "Bilingual healthcare insurance claims analysis for Saudi market",
+    "targetUsers": "Healthcare providers, insurance analysts, compliance officers",
+    "keyFeatures": ["file processing", "rejection analysis", "export capabilities", "mobile responsiveness"]
+  },
+  "qualityStandards": {
+    "testing": "Comprehensive testing for healthcare data processing",
+    "security": "Follow HIPAA compliance considerations",
+    "performance": "Optimize for large file processing and mobile devices",
+    "errorHandling": "Graceful error handling with user-friendly messages"
   }
 }

@@ -68,20 +68,46 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ### Development Standards
 - **TypeScript**: All new code must use TypeScript
 - **Code Style**: Follow the established patterns in `.editorconfig`
+- **Mobile-First**: Always start with mobile designs, then enhance for larger screens
 - **Bilingual**: Ensure Arabic/English support in all features
 - **Testing**: Comprehensive testing for healthcare data processing
 - **Security**: Follow HIPAA compliance considerations
+- **Accessibility**: Maintain WCAG AA compliance for all interactive elements
+- **Performance**: Optimize for large file processing and mobile devices
 
 ## 📚 Development Resources
 
-### GitHub Copilot Integration
-This repository is configured with GitHub Copilot settings to improve code suggestions:
-- **Configuration Files**: `.copilot/settings.json` with project context
-- **Editor Config**: `.editorconfig` for consistent formatting
-- **Contribution Guide**: `CONTRIBUTING.md` with detailed coding standards
-- **Preferred Languages**: TypeScript, JavaScript, CSS, HTML
-- **Domain Context**: Healthcare analytics with bilingual support
-- **BrainSAIT Standards**: Aligned coding practices and patterns
+## 🤖 GitHub Copilot Integration
+
+This repository has been specifically configured to maximize GitHub Copilot's effectiveness for healthcare domain development:
+
+### Configuration Files
+- **`.copilot/settings.json`**: Domain-specific context for healthcare analytics and Saudi market requirements
+- **`.editorconfig`**: Consistent code formatting across team members and Copilot suggestions
+- **`.vscode/settings.json`**: VS Code configuration optimized for TypeScript, React, and Tailwind CSS
+- **`.prettierrc.yml`**: Code formatting rules aligned with mobile-first development
+- **CONTRIBUTING.md**: Comprehensive coding standards including healthcare-specific guidelines
+
+### Copilot Context Enhancement
+The `.copilot/settings.json` file provides Copilot with:
+- **Healthcare Domain Knowledge**: Understanding of CCHI regulations, insurance terminology, and medical workflows
+- **Bilingual Support**: Context for English/Arabic development patterns and RTL support
+- **Mobile-First Patterns**: Responsive design principles and touch-friendly interface guidelines
+- **File Processing**: Best practices for handling large healthcare datasets and document processing
+- **Saudi Market Context**: Specific requirements for Saudi healthcare insurance providers
+
+### Development Workflow
+1. **Smart Suggestions**: Copilot understands healthcare terminology and provides relevant code suggestions
+2. **Bilingual Support**: Automatically suggests Arabic translations and RTL-compatible layouts
+3. **Mobile Optimization**: Prioritizes responsive design patterns in suggestions
+4. **Security Awareness**: Understands healthcare data privacy requirements and suggests secure patterns
+5. **Saudi Compliance**: Recognizes CCHI and local regulatory requirements in suggestions
+
+### Best Practices with Copilot
+- Use descriptive comments in English and Arabic to guide Copilot's suggestions
+- Leverage the healthcare domain context for accurate medical terminology
+- Utilize mobile-first design patterns that Copilot has learned from this configuration
+- Take advantage of bilingual development assistance for Arabic UI components
 
 ### Best Practices
 - Reference: [Best practices for Copilot coding agent](https://gh.io/copilot-coding-agent-tips)

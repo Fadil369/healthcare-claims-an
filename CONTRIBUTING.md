@@ -16,11 +16,28 @@
 
 ## Mobile-First Development
 
-- Start with mobile designs and progressively enhance for larger screens.
-- Use Tailwind's responsive breakpoints: sm: (640px+), md: (768px+), lg: (1024px+), xl: (1280px+).
-- Ensure minimum touch target size of 44x44px for interactive elements.
-- Test on various screen sizes and orientations.
-- Optimize for both portrait and landscape mobile views.
+- **Design Philosophy**: Start with mobile designs and progressively enhance for larger screens.
+- **Responsive Breakpoints**: Use Tailwind's responsive breakpoints systematically:
+  - `sm:` (640px+) - Small tablets and large phones in landscape
+  - `md:` (768px+) - Tablets in portrait mode
+  - `lg:` (1024px+) - Small laptops and tablets in landscape
+  - `xl:` (1280px+) - Desktop computers
+  - `2xl:` (1536px+) - Large desktop screens
+- **Touch Targets**: Ensure minimum touch target size of 44x44px for interactive elements.
+- **Navigation**: Implement hamburger menu for mobile with sidebar, expand to horizontal nav for desktop.
+- **Content Priority**: Use progressive disclosure - show essential content first, reveal details as screen real estate increases.
+- **Performance**: Optimize images and components for mobile networks and lower-powered devices.
+- **Testing**: Test on various screen sizes, orientations, and real devices.
+- **Gestures**: Support touch gestures where appropriate (swipe, pinch, long press).
+
+## File Processing Standards
+
+- **Upload Experience**: Provide clear upload areas with drag-and-drop support and progress indicators.
+- **File Validation**: Validate file types, sizes, and content before processing.
+- **Error Handling**: Provide specific, actionable error messages for file processing failures.
+- **Progress Tracking**: Show real-time progress for file uploads and processing.
+- **Export Options**: Support multiple export formats (PDF, Excel, JSON) with custom formatting.
+- **Large Files**: Handle large files gracefully with chunked processing and memory management.
 
 ## Pull Request Process
 
@@ -30,11 +47,30 @@
 - Test on multiple devices and screen sizes.
 - Verify Arabic RTL support works correctly.
 
-## UI/UX Standards
+## Healthcare & Saudi Market Standards
 
-- Prioritize intuitive navigation on small screens.
-- Use clear visual hierarchy with appropriate typography scaling.
-- Implement progressive disclosure for complex features.
-- Ensure consistent spacing using Tailwind's spacing scale.
-- Maintain high contrast ratios for accessibility.
-- Support both Arabic and English languages properly.
+- **CCHI Compliance**: Follow Council of Cooperative Health Insurance regulations and standards.
+- **Arabic Language**: Proper RTL (Right-to-Left) text support with Noto Sans Arabic font.
+- **Cultural Sensitivity**: Design patterns appropriate for Saudi healthcare environment.
+- **Data Privacy**: Implement strong data protection following local regulations.
+- **Medical Terminology**: Use accurate Arabic translations for medical terms.
+- **Rejection Categories**: Support custom categorization with bilingual labels.
+- **Insurance Providers**: Accommodate various Saudi insurance provider workflows.
+
+## Code Quality & Testing
+
+- **TypeScript Strict Mode**: Enable strict type checking for all new code.
+- **Component Testing**: Test components with various props and states.
+- **Integration Testing**: Test file processing workflows end-to-end.
+- **Accessibility Testing**: Verify keyboard navigation and screen reader compatibility.
+- **Performance Testing**: Monitor bundle size and runtime performance.
+- **Cross-Browser Testing**: Ensure compatibility across modern browsers.
+
+## Security Guidelines
+
+- **Data Sanitization**: Sanitize all user inputs and file contents.
+- **No Hardcoded Secrets**: Use environment variables for any configuration.
+- **Secure File Handling**: Validate and scan uploaded files for security threats.
+- **Local Processing**: Keep all data processing local - no external API calls with sensitive data.
+- **Audit Logging**: Log important actions for compliance and debugging.
+- **Error Messages**: Don't expose system internals in user-facing error messages.
