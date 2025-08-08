@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 
 export type Language = 'en' | 'ar'
 
@@ -23,7 +23,7 @@ const translations = {
     
     // Navigation
     'navigation': 'Navigation',
-    'settings': 'Settings',
+    'settings': 'Gear',
     
     // Upload
     'upload.title': 'Upload Insurance Files',
@@ -78,10 +78,10 @@ const translations = {
     'common.save': 'Save',
     'common.close': 'Close',
     'common.view': 'View',
-    'common.edit': 'Edit',
+    'common.edit': 'Pencil',
     'common.delete': 'Delete',
-    'common.search': 'Search',
-    'common.filter': 'Filter',
+    'common.search': 'MagnifyingGlass',
+    'common.filter': 'Funnel',
     'common.export': 'Export',
     'common.days': 'days',
     'common.sar': 'SAR',

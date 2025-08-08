@@ -15,11 +15,11 @@ import {
   Download, 
   FileText, 
   Table, 
-  FileSpreadsheet, 
-  FileX, 
+  FileCsv, 
+  File, 
   Calendar as CalendarIcon,
-  Filter,
-  Settings,
+  Funnel,
+  Gear,
   CheckCircle
 } from '@phosphor-icons/react'
 import { ClaimData, RejectionAnalysis, InsightData, AnalysisResult } from '@/types'
@@ -71,7 +71,7 @@ export function ExportControls({
         language,
         includeAnalysis,
         includeInsights,
-        includeFilters: {
+        includeFunnels: {
           dateRange: dateRange.start && dateRange.end ? {
             start: format(dateRange.start, 'yyyy-MM-dd'),
             end: format(dateRange.end, 'yyyy-MM-dd')
@@ -150,7 +150,7 @@ export function ExportControls({
     )
   }
 
-  const resetFilters = () => {
+  const resetFunnels = () => {
     setDateRange({})
     setSelectedStatuses(['approved', 'rejected', 'pending'])
     setSelectedProviders([])
@@ -158,7 +158,7 @@ export function ExportControls({
     setAmountRange({ min: '', max: '' })
   }
 
-  const getFilteredCount = () => {
+  const getFunneledCount = () => {
     return data.filter(claim => {
       // Date filter
       if (dateRange.start && dateRange.end) {
@@ -205,10 +205,10 @@ export function ExportControls({
           </Label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { value: 'xlsx', icon: FileSpreadsheet, label: 'Excel', color: 'text-green-600' },
+              { value: 'xlsx', icon: FileCsv, label: 'Excel', color: 'text-green-600' },
               { value: 'csv', icon: Table, label: 'CSV', color: 'text-blue-600' },
               { value: 'pdf', icon: FileText, label: 'PDF', color: 'text-red-600' },
-              { value: 'json', icon: FileX, label: 'JSON', color: 'text-purple-600' }
+              { value: 'json', icon: File, label: 'JSON', color: 'text-purple-600' }
             ].map(({ value, icon: Icon, label, color }) => (
               <Button
                 key={value}
@@ -226,7 +226,7 @@ export function ExportControls({
         {/* Advanced Options Toggle */}
         <div className="flex items-center justify-between">
           <Label className="flex items-center gap-2 cursor-pointer">
-            <Settings className="w-4 h-4" />
+            <Gear className="w-4 h-4" />
             {language === 'ar' ? 'خيارات متقدمة' : 'Advanced Options'}
           </Label>
           <Switch
@@ -266,7 +266,7 @@ export function ExportControls({
               </div>
             </div>
 
-            {/* Date Range Filter */}
+            {/* Date Range Funnel */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">
                 {language === 'ar' ? 'نطاق التاريخ' : 'Date Range'}
@@ -307,7 +307,7 @@ export function ExportControls({
               </div>
             </div>
 
-            {/* Status Filter */}
+            {/* Status Funnel */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">
                 {language === 'ar' ? 'حالة المطالبة' : 'Claim Status'}
@@ -351,16 +351,16 @@ export function ExportControls({
               </div>
             </div>
 
-            {/* Filter Summary */}
+            {/* Funnel Summary */}
             <div className="flex items-center justify-between pt-2 border-t">
               <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-muted-foreground" />
+                <Funnel className="w-4 h-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  {getFilteredCount().toLocaleString()} / {data.length.toLocaleString()} records
+                  {getFunneledCount().toLocaleString()} / {data.length.toLocaleString()} records
                 </span>
               </div>
-              <Button variant="ghost" size="sm" onClick={resetFilters}>
-                {language === 'ar' ? 'إعادة تعيين' : 'Reset Filters'}
+              <Button variant="ghost" size="sm" onClick={resetFunnels}>
+                {language === 'ar' ? 'إعادة تعيين' : 'Reset Funnels'}
               </Button>
             </div>
           </div>
@@ -374,7 +374,7 @@ export function ExportControls({
               disabled={isExporting || data.length === 0}
               className="gap-2"
             >
-              <FileSpreadsheet className="w-4 h-4" />
+              <FileCsv className="w-4 h-4" />
               {language === 'ar' ? 'تصدير المطالبات' : 'Export Claims'}
             </Button>
             

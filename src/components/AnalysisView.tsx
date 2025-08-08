@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { ExportControls } from '@/components/ExportControls'
-import { TrendingUp, TrendingDown, Minus, AlertTriangle, Activity, Calendar, Gear, ChartBar } from '@phosphor-icons/react'
+import { TrendUp, TrendDown, Minus, Warning, Activity, Calendar, Gear, ChartBar } from '@phosphor-icons/react'
 import { rejectionRulesEngine } from '@/lib/rejectionRulesEngine'
 import { ClaimData, RejectionPattern, RejectionAnalysis, RejectionRule, InsuranceProvider, AnalysisResult } from '@/types'
 
@@ -37,14 +37,14 @@ export function AnalysisView() {
   const analysisData = useMemo(() => {
     if (!claimsData.length) return null
     
-    // Filter by time range
+    // Funnel by time range
     const cutoffDate = new Date()
     cutoffDate.setDate(cutoffDate.getDate() - parseInt(timeRange))
     let filteredData = claimsData.filter(
       claim => new Date(claim.submissionDate) >= cutoffDate
     )
 
-    // Filter by provider if selected
+    // Funnel by provider if selected
     if (selectedProvider !== 'all') {
       filteredData = filteredData.filter(claim => claim.providerId === selectedProvider)
     }
@@ -180,7 +180,7 @@ export function AnalysisView() {
     return (
       <div className="container mx-auto px-6 py-8">
         <div className="text-center py-16">
-          <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <Warning className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-2xl font-semibold mb-2">No Data Available</h2>
           <p className="text-muted-foreground">
             Upload some files to see detailed analysis
@@ -192,8 +192,8 @@ export function AnalysisView() {
   
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'increasing': return <TrendingUp className="w-4 h-4 text-destructive" />
-      case 'decreasing': return <TrendingDown className="w-4 h-4 text-secondary" />
+      case 'increasing': return <TrendUp className="w-4 h-4 text-destructive" />
+      case 'decreasing': return <TrendDown className="w-4 h-4 text-secondary" />
       default: return <Minus className="w-4 h-4 text-muted-foreground" />
     }
   }
@@ -352,7 +352,7 @@ export function AnalysisView() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                  <Warning className="w-5 h-5 text-yellow-500" />
                   {t('analysis.technical')}
                 </CardTitle>
                 <CardDescription>

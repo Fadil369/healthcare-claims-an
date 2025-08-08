@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/useKV'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { Header } from '@/components/Header'
 import { FileUploadView } from '@/components/FileUploadView'
