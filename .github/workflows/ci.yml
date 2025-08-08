@@ -1,4 +1,6 @@
 name: CI/CD Healthcare Claims Analyzer
+permissions:
+  contents: read
 
 on:
   push:
